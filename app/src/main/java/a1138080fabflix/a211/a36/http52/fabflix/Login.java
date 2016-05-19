@@ -315,14 +315,6 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
         @Override
         protected Boolean doInBackground(Void... params) {
             // NOTE: comment out this for loop to test network connection (doesn't work right now)
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
             // NOTE: not a valid account, register if necessary.
             //return false;
 
@@ -335,21 +327,17 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
                 httpConnection.setHeader("Accept", "application/json");
                 httpConnection.setHeader("Content-type", "application/json");
 
-                //creates
-//                String paramString = String.format("?email=%s&password=%s", mEmail, mPassword);
-//                Log.d("Debug", paramString);
-//                httpConnection.setRequestMessage(paramString);
-
                 int responseCode = httpConnection.getResponseCode();
-                Log.d("responseCode", String.valueOf(responseCode));
-                String responseMessage = httpConnection.getResponseMessage();
-                Log.d("Debug", responseMessage);
-                if (responseCode == HttpURLConnection.HTTP_CREATED){
-                    //IMPORTANT: have server send true if sent userJSON is in customers table
-//                    String responseMessage = httpConnection.getResponseMessage();
-//                    if (responseMessage == "true"){
-//                        return true; //logged in
-//                    }
+                if (responseCode == 200) {
+                    String responseMessage = httpConnection.getResponseMessage();
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseMessage);
+                        Log.d("Debug Login", String.valueOf(jsonObject.getBoolean("Success")));
+                        return jsonObject.getBoolean("Success");
+                    } catch (JSONException jsonE) {
+                        jsonE.printStackTrace();
+                        return false;
+                    }
                 }
                 // OLD: Simulate network access.
                 //Thread.sleep(2000);
@@ -366,16 +354,10 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
-
              if (success) {
-                 Log.d("Debug", "This is dog");
                 //NOTE: redirects from login to homescreen
                  Intent i = new Intent(Login.this, HomeScreen.class);
-
-                // Intent i = new Intent(Login.this, ListViewLoader.class);
                 startActivity(i);
-
-                //finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

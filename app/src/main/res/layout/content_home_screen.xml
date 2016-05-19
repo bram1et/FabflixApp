@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/search_view"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,6 +12,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="a1138080fabflix.a211.a36.http52.fabflix.HomeScreen"
     tools:showIn="@layout/activity_home_screen">
+
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -34,6 +36,27 @@
             android:text="@string/action_search"
             android:textStyle="bold" />
 
+        <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:context="a1138080fabflix.a211.a36.http52.fabflix.MovieList"
+            tools:showIn="@layout/activity_movie_list">
+
+            <TextView
+                android:id="@+id/movie_results"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:text="Star Wars Woot"
+                android:textSize="@dimen/movie_list_font_size" />
+
+        </android.support.v4.widget.NestedScrollView>
+
     </android.support.design.widget.TextInputLayout>
+
+
 
 </RelativeLayout>
